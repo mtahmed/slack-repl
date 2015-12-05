@@ -1,0 +1,23 @@
+GIT
+  remote: https://github.com/mtahmed/slack-repl
+  revision: 58c209f40f02f0328c1a9e3df6ca4980a4d1c510
+  ref: 58c209f
+  specs:
+    slack-rtmapi (1.0.0.rc4)
+      websocket-driver
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    i18n (0.7.0)
+    minitest (5.5.1)
+    thread_safe (0.3.4)
+    websocket-driver (0.5.1)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  slack-rtmapi!
