@@ -15,7 +15,7 @@ PLAYPEN_ARGS = ["playpen",
                 "--memory-limit=128",
                 "--timeout=5",
                 "--learn",
-                "--user=rust",
+                "--user=repl",
                 "--"]
 
 # Connect to Slack

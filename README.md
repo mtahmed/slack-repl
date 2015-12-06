@@ -1,40 +1,85 @@
-## Slack Timezone Converter
+## Slack REPL
 
-An integration for Slack that converts any time string in a message to all timezones where the team is.
+A REPL usable from slack using messages like so:
 
-![Screenshot](timezone.png?raw=true "Screenshot")
+![Screenshot](scrot.png?raw=true "Screenshot")
 
-Currently supports any format parsable by [ActiveSupport](http://api.rubyonrails.org/classes/ActiveSupport/TimeWithZone.html).
+## Setup
 
-Any time a time string is found in a message that mentions `@time`, the integration, running in a server, converts it to all timezones
-where the team has at least one member. A message is sent back to the Slack channel with all the conversions and a fancy clock icon
-that represents the time. It supports any channel joined by the user whose token is passed as parameter. This user's timezone is used
-as the default when a timezone is not present on the parsed message.
+This REPL relies on [playpen](https://github.com/thestinger/playpen) to sandbox the running code.
+On Archlinux, playpen can be installed using pacman: `pacman -S playpen`. To help install
+packages into the sandbox, installing `arch-install-scripts` would be helpful too.
 
-Example message that would be parsed: `Hey, our meeting is at 12h30 PDT @time`.
+Then setup the sandbox:
+
+```
+> mkdir sandbox
+> pacstrap -c -d root-nightly.new \
+    bash \
+    coreutils \
+    grep \
+    dash \
+    filesystem \
+    glibc \
+    pacman \
+    procps-ng \
+    shadow \
+    util-linux \
+    gcc \
+    racket \
+    ghc \
+    python \
+		ruby
+> arch-chroot sandbox
+> useradd -m repl; exit
+```
+
+To setup rust, we need to install the nightly version of rust so we can use rusti (a rust REPL) to
+eval rust code. This can be done by downloading the `rust-nightly-bin` PKGBUILD from AUR, and building
+it with `makepkg -s`. Similary, `rusti-git` PKGBUILD from AUR can be used to build the rusti
+binaries. Then we can simply copy the built files into the sandbox.
+
+The gems can be installed with `bundle install`.
+
+Once everything is setup, we can start bot:
+
+`sudo ruby slack-repl.rb <token>`
+
+The sudo can be omitted depending on the cgroups setup.
+
+## Security
+
+All code received from Slack is run in a sandbox provided by [playpen](https://github.com/thestinger/playpen).
+Playpen uses seccomp, namespaces, and cgroups to limit resource usage by the apps running in the sandbox.
+The config used by this REPL has the following limits:
+
+- Memory: 64M
+- Timeout: 5s
+- Max tasks: 1
+
+The code is also run as a non-privileged user to avoid it being able to modify the filesystem.
+
+## Languages
+
+The following languages are supported:
+
+- Rust
+- Ruby
+- Python
+- Haskell
+- Brainfuck
+- Shell
+- Scheme
+
+Adding new languages is very simple: just install some compiler/interpreter for the language
+and add a new case statement.
+
+## Requirements
 
 In order to use this integration, the following Ruby libraries are needed:
 
 * slack-rtmapi
-* active\_support
-* json
 
 But they can be installed by using `bundle`:
 
 `bundle install`
-
-After all requirements are met, it's just necessary to run the code, passing the Slack token as parameter:
-
-`ruby slack-timezone-converter.rb <Slack token> <number of times per line (defaults to 1)> <additional message>`
-
-This program runs indefinitely and listens for new messages on the Slack channels. It can be stopped by just stopping the process.
-
-## TODO
-
-* Correctly identify the format where a dot is the separator between hour and minutes (e.g., "8.30am")
-
-## References
-
-* https://api.slack.com/web#basics
-* https://api.slack.com/rtm
-* https://github.com/caiosba/slack-rtmapi
