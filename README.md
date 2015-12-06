@@ -2,7 +2,7 @@
 
 A REPL usable from slack using messages like so:
 
-![Screenshot](scrot.png?raw=true "Screenshot")
+![Screenshot](screenshot.png?raw=true "Screenshot")
 
 ## Setup
 
