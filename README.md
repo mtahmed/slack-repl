@@ -29,7 +29,7 @@ Then setup the sandbox:
     racket \
     ghc \
     python \
-		ruby
+    ruby
 > arch-chroot sandbox
 > useradd -m repl; exit
 ```
