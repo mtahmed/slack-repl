@@ -57,7 +57,7 @@ client.on :message do |data|
       end
 
       if status.success?
-        result = "Done:\n #{stdout + stderr}"
+        result = "Done:\n ```\n#{stdout + stderr}\n```"
       else
         result = "Failed: #{stderr}"
       end
