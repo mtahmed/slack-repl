@@ -14,7 +14,7 @@ Then setup the sandbox:
 
 ```
 > mkdir sandbox
-> pacstrap -c -d root-nightly.new \
+> pacstrap -c -d sandbox \
     bash \
     coreutils \
     grep \
